@@ -1,0 +1,67 @@
+  services:
+
+    mysql:
+      image: mysql:8.0
+      container_name: mysql
+
+      restart: unless-stopped
+
+      environment:
+        MYSQL_ROOT_PASSWORD: root123
+        MYSQL_DATABASE: springboot_db
+        MYSQL_USER: springuser
+        MYSQL_PASSWORD: Spring@2026#Boot
+
+      ports:
+        - "3306:3306"
+
+      volumes:
+        - mysql-data:/var/lib/mysql
+
+      networks:
+        - spring-network
+
+    springboot:
+      build: .
+
+      container_name: springboot
+
+      restart: unless-stopped
+
+      depends_on:
+        - mysql
+
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springboot_db
+        SPRING_DATASOURCE_USERNAME: springuser
+        SPRING_DATASOURCE_PASSWORD: Spring@2026#Boot
+
+      ports:
+        - "8080:8080"
+
+      networks:
+        - spring-network
+
+    react:
+      build:
+        context: /home/msalunke/react-tutorial-project/react-tutorial-app
+
+      container_name: react
+
+      depends_on:
+        - springboot
+
+      ports:
+        - "5173:80"
+
+      networks:
+        - spring-network
+
+      restart: unless-stopped
+
+  volumes:
+    mysql-data:
+      external: true
+
+  networks:
+    spring-network:
