@@ -13,6 +13,25 @@ on:
 jobs:
   build:
 
+    services:
+      mysql:
+        image: mysql:8.0
+
+        env:
+          MYSQL_ROOT_PASSWORD: root123
+          MYSQL_DATABASE: springboot_db
+          MYSQL_USER: springuser
+          MYSQL_PASSWORD: Spring@2026#Boot
+
+        ports:
+          - 3306:3306
+
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot123"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     runs-on: ubuntu-latest
 
     steps:
