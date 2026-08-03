@@ -35,4 +35,8 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build with Maven
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/springboot_db
+          SPRING_DATASOURCE_USERNAME: springuser
+          SPRING_DATASOURCE_PASSWORD: Spring@2026#Boot
         run: ./mvnw clean package
